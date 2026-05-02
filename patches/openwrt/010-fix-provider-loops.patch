@@ -1,18 +1,20 @@
 diff --git a/feeds/packages/net/sing-box/Makefile b/feeds/packages/net/sing-box/Makefile
 --- a/feeds/packages/net/sing-box/Makefile
 +++ b/feeds/packages/net/sing-box/Makefile
-@@ -46,6 +46,5 @@ define Package/sing-box-tiny
+@@ -48,7 +48,6 @@ endef
+ define Package/sing-box-tiny
    $(Package/sing-box-default)
    TITLE+= (tiny)
-   VARIANT:=tiny
 -  PROVIDES:=sing-box
+   VARIANT:=tiny
    CONFLICTS:=sing-box
  endef
  
 diff --git a/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile b/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile
 --- a/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile
 +++ b/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile
-@@ -35,6 +35,5 @@ define Package/mihomo-alpha
+@@ -34,7 +34,6 @@ define Package/mihomo-alpha
+   TITLE:=A rule based proxy in Go.
    URL:=https://wiki.metacubex.one
    DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +ip-full +kmod-inet-diag +kmod-tun
 -  PROVIDES:=mihomo
@@ -22,7 +24,8 @@ diff --git a/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile b/package/custom
 diff --git a/package/custom/OpenWrt-nikki/mihomo-meta/Makefile b/package/custom/OpenWrt-nikki/mihomo-meta/Makefile
 --- a/package/custom/OpenWrt-nikki/mihomo-meta/Makefile
 +++ b/package/custom/OpenWrt-nikki/mihomo-meta/Makefile
-@@ -36,6 +36,5 @@ define Package/mihomo-meta
+@@ -35,7 +35,6 @@ define Package/mihomo-meta
+   URL:=https://wiki.metacubex.one
    DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +ip-full +kmod-inet-diag +kmod-tun
    PROVIDES:=mihomo
 -  CONFLICTS:=mihomo-alpha
