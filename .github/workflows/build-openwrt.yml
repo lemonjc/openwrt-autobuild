@@ -26,7 +26,7 @@ jobs:
 
       - name: Install build dependencies
         run: |
-          sudo apt-get update
+          sudo apt-get update -y
           sudo apt-get install -y \
             build-essential clang flex bison g++ gawk gcc-multilib g++-multilib \
             gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig \
@@ -62,7 +62,9 @@ jobs:
           ./scripts/feeds install -a
 
       - name: Apply OpenWrt patches
-        run: ./scripts/apply-openwrt-patches.sh "$OPENWRT_DIR" patches/openwrt
+        run: |
+          chmod +x ./scripts/apply-openwrt-patches.sh
+          ./scripts/apply-openwrt-patches.sh "$OPENWRT_DIR" patches/openwrt
 
       - name: Load configuration
         working-directory: ${{ env.OPENWRT_DIR }}
