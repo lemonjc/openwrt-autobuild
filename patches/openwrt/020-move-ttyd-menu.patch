@@ -1,0 +1,30 @@
+diff --git a/feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json b/feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
+--- a/feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
++++ b/feeds/luci/applications/luci-app-ttyd/root/usr/share/luci/menu.d/luci-app-ttyd.json
+@@ -1,6 +1,7 @@
+ {
+-	"admin/services/ttyd": {
++	"admin/system/ttyd": {
+ 		"title": "Terminal",
++		"order": 3,
+ 		"action": {
+ 			"type": "firstchild"
+ 		},
+@@ -10,7 +11,7 @@
+ 		}
+ 	},
+ 
+-	"admin/services/ttyd/ttyd": {
++	"admin/system/ttyd/ttyd": {
+ 		"title": "Terminal",
+ 		"order": 1,
+ 		"action": {
+@@ -19,7 +20,7 @@
+ 		}
+ 	},
+ 
+-	"admin/services/ttyd/config": {
++	"admin/system/ttyd/config": {
+ 		"title": "Config",
+ 		"order": 2,
+ 		"action": {

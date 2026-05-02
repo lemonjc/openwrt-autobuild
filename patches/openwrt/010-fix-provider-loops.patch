@@ -1,0 +1,31 @@
+diff --git a/feeds/packages/net/sing-box/Makefile b/feeds/packages/net/sing-box/Makefile
+--- a/feeds/packages/net/sing-box/Makefile
++++ b/feeds/packages/net/sing-box/Makefile
+@@ -46,6 +46,5 @@ define Package/sing-box-tiny
+   $(Package/sing-box-default)
+   TITLE+= (tiny)
+   VARIANT:=tiny
+-  PROVIDES:=sing-box
+   CONFLICTS:=sing-box
+ endef
+ 
+diff --git a/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile b/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile
+--- a/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile
++++ b/package/custom/OpenWrt-nikki/mihomo-alpha/Makefile
+@@ -35,6 +35,5 @@ define Package/mihomo-alpha
+   URL:=https://wiki.metacubex.one
+   DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +ip-full +kmod-inet-diag +kmod-tun
+-  PROVIDES:=mihomo
+   CONFLICTS:=mihomo-meta
+   VARIANT:=alpha
+   ALTERNATIVES:=\
+diff --git a/package/custom/OpenWrt-nikki/mihomo-meta/Makefile b/package/custom/OpenWrt-nikki/mihomo-meta/Makefile
+--- a/package/custom/OpenWrt-nikki/mihomo-meta/Makefile
++++ b/package/custom/OpenWrt-nikki/mihomo-meta/Makefile
+@@ -36,6 +36,5 @@ define Package/mihomo-meta
+   DEPENDS:=$(GO_ARCH_DEPENDS) +ca-bundle +ip-full +kmod-inet-diag +kmod-tun
+   PROVIDES:=mihomo
+-  CONFLICTS:=mihomo-alpha
+   VARIANT:=meta
+   DEFAULT_VARIANT:=1
+   ALTERNATIVES:=\

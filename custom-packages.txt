@@ -1,0 +1,5 @@
+# repo dest [ref]
+https://github.com/sirpdboy/luci-app-ddns-go package/custom/luci-app-ddns-go
+https://github.com/nikkinikki-org/OpenWrt-momo.git package/custom/OpenWrt-momo
+https://github.com/nikkinikki-org/OpenWrt-nikki.git package/custom/OpenWrt-nikki
+https://github.com/jerrykuku/luci-theme-argon.git package/custom/luci-theme-argon

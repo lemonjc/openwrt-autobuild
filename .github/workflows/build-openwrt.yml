@@ -1,0 +1,104 @@
+name: Build OpenWrt x86_64
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    paths:
+      - '.github/workflows/build-openwrt.yml'
+      - 'configs/**'
+      - 'custom-packages.txt'
+      - 'patches/**'
+      - 'scripts/**'
+
+env:
+  OPENWRT_REPO: https://github.com/openwrt/openwrt.git
+  OPENWRT_DIR: openwrt
+
+jobs:
+  build:
+    runs-on: ubuntu-24.04
+
+    steps:
+      - name: Checkout build recipe
+        uses: actions/checkout@v4
+
+      - name: Install build dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y \
+            build-essential clang flex bison g++ gawk gcc-multilib g++-multilib \
+            gettext git libncurses5-dev libssl-dev python3-setuptools rsync swig \
+            unzip zlib1g-dev file wget curl ca-certificates qemu-utils ccache \
+            subversion patch upx-ucl python3 python3-pip python3-ply python3-docutils \
+            libelf-dev libglib2.0-dev libltdl-dev libreadline-dev libtool \
+            pkgconf squashfs-tools zstd
+
+      - name: Resolve latest stable OpenWrt tag
+        id: openwrt-tag
+        shell: bash
+        run: |
+          latest_tag="$(git ls-remote --tags --refs "$OPENWRT_REPO" 'refs/tags/v*' | awk '{ sub("refs/tags/", "", $2); print $2 }' | grep -v -- '-rc' | sort -Vr | head -n1)"
+          if [ -z "$latest_tag" ]; then
+            echo "No stable OpenWrt tag found" >&2
+            exit 1
+          fi
+          echo "OPENWRT_TAG=$latest_tag" >> "$GITHUB_ENV"
+          echo "tag=$latest_tag" >> "$GITHUB_OUTPUT"
+
+      - name: Clone OpenWrt
+        run: git clone --depth=1 --branch "$OPENWRT_TAG" "$OPENWRT_REPO" "$OPENWRT_DIR"
+
+      - name: Clone custom packages
+        run: ./scripts/clone-custom-packages.sh "$OPENWRT_DIR" custom-packages.txt
+
+      - name: Update and install feeds
+        working-directory: ${{ env.OPENWRT_DIR }}
+        run: |
+          ./scripts/feeds update -a
+          ./scripts/feeds install -a
+
+      - name: Apply OpenWrt patches
+        run: ./scripts/apply-openwrt-patches.sh "$OPENWRT_DIR" patches/openwrt
+
+      - name: Load configuration
+        working-directory: ${{ env.OPENWRT_DIR }}
+        run: |
+          cp "$GITHUB_WORKSPACE/configs/x86_64.config" .config
+          make defconfig
+
+      - name: Verify selected packages
+        working-directory: ${{ env.OPENWRT_DIR }}
+        run: |
+          grep -E 'CONFIG_PACKAGE_(luci-app-momo|momo|sing-box|luci-app-nikki|nikki|mihomo-meta|luci-app-ttyd|ttyd|luci-theme-argon)=y' .config
+
+      - name: Download package sources
+        working-directory: ${{ env.OPENWRT_DIR }}
+        run: make download -j"$(nproc)"
+
+      - name: Build firmware
+        working-directory: ${{ env.OPENWRT_DIR }}
+        shell: bash
+        run: |
+          set -o pipefail
+          make -j"$(nproc)" V=s 2>&1 | tee build.log || make -j1 V=s 2>&1 | tee build_1.log
+
+      - name: Upload build logs on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-build-logs-${{ env.OPENWRT_TAG }}
+          path: |
+            openwrt/build.log
+            openwrt/build_1.log
+            openwrt/logs/
+          if-no-files-found: warn
+
+      - name: Upload firmware
+        if: success()
+        uses: actions/upload-artifact@v4
+        with:
+          name: openwrt-x86-64-${{ env.OPENWRT_TAG }}
+          path: openwrt/bin/targets/**
+          if-no-files-found: error
