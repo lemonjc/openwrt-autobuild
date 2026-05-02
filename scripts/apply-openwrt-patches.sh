@@ -19,6 +19,9 @@ if [ ! -d "$patch_dir" ]; then
   exit 1
 fi
 
++openwrt_dir="$(cd "$openwrt_dir" && pwd -P)"
++patch_dir="$(cd "$patch_dir" && pwd -P)"
+
 shopt -s nullglob
 patches=("$patch_dir"/*.patch)
 
