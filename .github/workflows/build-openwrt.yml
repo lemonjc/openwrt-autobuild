@@ -51,7 +51,9 @@ jobs:
         run: git clone --depth=1 --branch "$OPENWRT_TAG" "$OPENWRT_REPO" "$OPENWRT_DIR"
 
       - name: Clone custom packages
-        run: ./scripts/clone-custom-packages.sh "$OPENWRT_DIR" custom-packages.txt
+        run: |
+          chmod +x ./scripts/clone-custom-packages.sh
+          ./scripts/clone-custom-packages.sh "$OPENWRT_DIR" custom-packages.txt
 
       - name: Update and install feeds
         working-directory: ${{ env.OPENWRT_DIR }}
